@@ -1,0 +1,6 @@
+framework module Pods_Blabber_Tests {
+  umbrella header "Pods-Blabber_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}
