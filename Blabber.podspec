@@ -7,30 +7,20 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = 'Blabber'
-  s.version          = '1.0.0'
-  s.summary          = 'iOS modular logger based on CocoaLumberjack.'
+  s.name             = "Blabber"
+  s.version          = "1.0.3"
+  s.summary          = "iOS modular logger based on CocoaLumberjack."
+  s.homepage         = "https://github.com/SysdataSpA/Blabber"
+  s.license          = 'Apache 2.0'
+  s.author           = { "Sysdata S.p.A." => "team.mobile@sysdata.it" }
 
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
-
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
-
-  s.homepage         = 'https://github.com/SysdataSpA/Blabber'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'francescoceravolo' => 'team.mobile@sysdata.it' }
   s.source           = { :git => 'https://github.com/SysdataSpA/Blabber.git', :tag => s.version.to_s }
+
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'Blabber/Classes/**/*'
+  s.source_files = 'Blabber/Classes/Base/**/*'
   
   # s.resource_bundles = {
   #   'Blabber' => ['Blabber/Assets/*.png']
@@ -38,6 +28,13 @@ TODO: Add long description of the pod here.
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'CocoaLumberjack', '~> 2.0'
-  s.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'SD_LOGGER_AVAILABLE=1' }
+
+  # s.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'SD_LOGGER_AVAILABLE=1' }
+
+
+  s.subspec 'CocoaLumberjack' do |cl|
+     cl.source_files = 'Blabber/Classes/CocoaLumberjack/*'
+     cl.dependency 'CocoaLumberjack', '~> 2.0'
+  end
+
 end

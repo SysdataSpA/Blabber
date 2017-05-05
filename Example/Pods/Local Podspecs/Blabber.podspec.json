@@ -1,30 +1,29 @@
 {
   "name": "Blabber",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "summary": "iOS modular logger based on CocoaLumberjack.",
-  "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/SysdataSpA/Blabber",
-  "license": {
-    "type": "MIT",
-    "file": "LICENSE"
-  },
+  "license": "Apache 2.0",
   "authors": {
-    "francescoceravolo": "team.mobile@sysdata.it"
+    "Sysdata S.p.A.": "team.mobile@sysdata.it"
   },
   "source": {
     "git": "https://github.com/SysdataSpA/Blabber.git",
-    "tag": "1.0.0"
+    "tag": "1.0.3"
   },
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": "Blabber/Classes/**/*",
-  "dependencies": {
-    "CocoaLumberjack": [
-      "~> 2.0"
-    ]
-  },
-  "xcconfig": {
-    "GCC_PREPROCESSOR_DEFINITIONS": "SD_LOGGER_AVAILABLE=1"
-  }
+  "source_files": "Blabber/Classes/Base/**/*",
+  "subspecs": [
+    {
+      "name": "CocoaLumberjack",
+      "source_files": "Blabber/Classes/CocoaLumberjack/*",
+      "dependencies": {
+        "CocoaLumberjack": [
+          "~> 2.0"
+        ]
+      }
+    }
+  ]
 }
