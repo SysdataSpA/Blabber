@@ -15,6 +15,11 @@
 #import <Foundation/Foundation.h>
 #define SD_LOGGER_AVAILABLE 1
 
+#if __has_include("CocoaLumberjack.h") || __has_include("CocoaLumberjack/CocoaLumberjack.h")
+#define HAS_COCOALAMBERJACK 1
+#import <CocoaLumberjack/CocoaLumberjack.h>
+#endif
+
 /**
  *  log levels for SDLogger.
  */
@@ -25,6 +30,15 @@ typedef NS_ENUM (NSUInteger, SDLogLevel)
     SDLogLevelWarning,
     SDLogLevelError
 };
+
+@class SDLogger;
+@protocol SDLoggerDelegate <NSObject>
+
+@optional
+- (void) logger:(SDLogger* _Nonnull)logger didReceiveLogWithLevel:(SDLogLevel)level syncMode:(BOOL)syncMode module:(NSString *_Nullable)module file:(NSString *_Nullable)file function:(NSString* _Nullable)function line:(NSUInteger)line format:(NSString * _Nullable)format arguments:(va_list)arguments;
+
+@end
+
 
 @protocol SDLoggerModuleProtocol <NSObject>
 
@@ -55,35 +69,6 @@ typedef NS_ENUM (NSUInteger, SDLogLevel)
 @property (nonatomic, assign) SDLogLevel logLevel;
 
 /**
- *  Set default cloros for a specific log level for a given module. 
- *  NB: Works only with XCode 7
- *
- *  @param fgColor text color.
- *  @param bgColor background color.
- *  @param level   log level to set the given colors.
- */
-- (void) setForegroundColor:(UIColor* _Nonnull)fgColor andBackgroundColor:(UIColor* _Nonnull)bgColor forLogLevel:(SDLogLevel)level;
-
-/**
- *  Return the text color for the specific log level.
- *  NB: Works only with XCode 7
- *  @param logLevel log level.
- *
- *  @return text color.
- */
-- (UIColor* _Nullable)foregroundColorForLogLevel:(SDLogLevel)logLevel;
-
-/**
- *  Return the background color for the specific log level.
- *  NB: Works only with XCode 7
- *
- *  @param logLevel log level.
- *
- *  @return background color.
- */
-- (UIColor* _Nullable)backgroundColorForLogLevel:(SDLogLevel)logLevel;
-
-/**
  *  Set print log to async mode. This will be faster, but could mesh log (order could be wrong)
  *
  *  @param useAsync flag to manage the async print.
@@ -107,6 +92,9 @@ typedef NS_ENUM (NSUInteger, SDLogLevel)
  */
 @interface SDLogger : NSObject
 
+
+@property (nonatomic, weak) id <SDLoggerDelegate> delegate;
+
 /**
  *  log level for all logs that are not associated to a specific module.
  *
@@ -121,13 +109,6 @@ typedef NS_ENUM (NSUInteger, SDLogLevel)
  */
 @property (nonatomic, assign) BOOL forceSyncLogs;
 
-/**
- *  enable use of XcodeColors for logs.
- *  NB: available only in XCode 7
- *
- *  Default: NO.
- */
-@property (nonatomic, assign) BOOL colorsEnabled;
 
 /**
  *  method that instantiate the shared instance.

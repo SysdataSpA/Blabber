@@ -14,28 +14,24 @@
 
 #import "SDLogger.h"
 #import "DDLog.h"
-#import "SDDDFormatter.h"
-
-#define XCODE_COLORS_ESCAPE @"\033["
-#define XCODE_COLORS_RESET     XCODE_COLORS_ESCAPE @";"   // Clear any foreground or background color
 
 #define kGenericModuleName  @"SDLogger.Generic"
-#define kDefaultForegroundColorsForLogs @{@(SDLogLevelVerbose): [UIColor darkGrayColor], \
-@(SDLogLevelInfo): [UIColor blackColor], \
-@(SDLogLevelWarning): [UIColor colorWithRed:1.f green:88.f/255.f blue:0 alpha:1], \
-@(SDLogLevelError): [UIColor redColor]}
-#define kDefaultBackgroundColorsForLogs @{@(SDLogLevelVerbose): [UIColor whiteColor], \
-@(SDLogLevelInfo): [UIColor whiteColor], \
-@(SDLogLevelWarning): [UIColor whiteColor], \
-@(SDLogLevelError): [UIColor whiteColor]}
 
 @interface SDLoggerUtils : NSObject
+
+#ifdef HAS_COCOALUMBERJACK
+#import "SDDDFormatter.h"
+
 + (DDLogLevel)ddLogLevelFromSDLogLevel:(SDLogLevel)level;
 + (DDLogFlag)ddLogFlagFromSDLogLevel:(SDLogLevel)level;
+#endif
+
 @end
 
 @implementation SDLoggerUtils
 
+
+#ifdef HAS_COCOALUMBERJACK
 /**
  *  utility method to convert SDLogLevel into corresponding DDLogLevel
  */
@@ -88,18 +84,12 @@
     }
 }
 
+#endif
+
 @end
 
 
 @interface SDLogModuleSetting ()
-/**
- *  keys: SDLogLevel wrapped in NSNumber; values: UIColor || [NSNull null]
- */
-@property (nonatomic, strong) NSMutableDictionary *foregroundColorsByLevel;
-/**
- *  keys: SDLogLevel wrapped in NSNumber; values: UIColor || [NSNull null]
- */
-@property (nonatomic, strong) NSMutableDictionary *backgroundColorsByLevel;
 
 /**
  *  keys: SDLogLevel wrapped in NSNumber; values: BOOL wrapped in NSNumber
@@ -121,12 +111,7 @@
     {
         _moduleName = name;
         _context = context;
-        _foregroundColorsByLevel = [[NSMutableDictionary alloc] init];
-        _backgroundColorsByLevel = [[NSMutableDictionary alloc] init];
-        for (SDLogLevel level = SDLogLevelVerbose; level <= SDLogLevelError; level++)
-        {
-            [self setForegroundColor:kDefaultForegroundColorsForLogs[@(level)] andBackgroundColor:kDefaultBackgroundColorsForLogs[@(level)] forLogLevel:level];
-        }
+        
         _asyncModeByLevel = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@NO, @(SDLogLevelError), @YES, @(SDLogLevelWarning), @YES, @(SDLogLevelVerbose), nil];
 #if DEBUG
         _logLevel = SDLogLevelVerbose;
@@ -135,36 +120,6 @@
 #endif
     }
     return self;
-}
-
-- (void)setForegroundColor:(UIColor *)fgColor andBackgroundColor:(UIColor *)bgColor forLogLevel:(SDLogLevel)level
-{
-    self.foregroundColorsByLevel[@(level)] = fgColor ? fgColor :[NSNull null];
-    self.backgroundColorsByLevel[@(level)] = bgColor ? bgColor :[NSNull null];
-    
-    // For colored logs
-    DDLogFlag flag = [SDLoggerUtils ddLogFlagFromSDLogLevel:level];
-    [[DDTTYLogger sharedInstance] setForegroundColor:fgColor backgroundColor:bgColor forFlag:flag context:self.context];
-}
-
-- (UIColor *)foregroundColorForLogLevel:(SDLogLevel)logLevel
-{
-    if (!self.foregroundColorsByLevel[@(logLevel)] || [self.foregroundColorsByLevel[@(logLevel)] isKindOfClass:[NSNull class]])
-    {
-        return nil;
-    }
-    
-    return self.foregroundColorsByLevel[@(logLevel)];
-}
-
-- (UIColor *)backgroundColorForLogLevel:(SDLogLevel)logLevel
-{
-    if (!self.backgroundColorsByLevel[@(logLevel)] || [self.backgroundColorsByLevel[@(logLevel)] isKindOfClass:[NSNull class]])
-    {
-        return nil;
-    }
-    
-    return self.backgroundColorsByLevel[@(logLevel)];
 }
 
 - (void)setUseAsyncLog:(BOOL)useAsync forLogLevel:(SDLogLevel)logLevel
@@ -222,9 +177,7 @@
 
 - (void) setupWithLoggers:(NSArray*)loggers
 {
-    // enable XcodeColors: in XCode 8 doesn't work
-    setenv("XcodeColors", "YES", 0);
-    
+#ifdef HAS_COCOALUMBERJACK
     // default setup
     if (loggers.count == 0)
     {
@@ -250,6 +203,7 @@
     {
         [DDLog addLogger:logger];
     }
+#endif
     
     // default levels for generic logger.
     // levels should be set after DDTTYLogger creation to use XcodeColors.
@@ -264,12 +218,6 @@
 {
     _genericLogLevel = genericLogLevel;
     [self setLogLevel:genericLogLevel forModuleWithName:kGenericModuleName];
-}
-
-- (void)setColorsEnabled:(BOOL)colorsEnabled
-{
-    _colorsEnabled = colorsEnabled;
-    [[DDTTYLogger sharedInstance] setColorsEnabled:colorsEnabled];
 }
 
 - (void)setLogLevel:(SDLogLevel)level forModuleWithName:(NSString *)module
@@ -352,7 +300,7 @@
     // Log with CocoaLumberjack
     if (format)
     {
-        
+#ifdef HAS_COCOALUMBERJACK
         [DDLog log:!syncLog
              level:[SDLoggerUtils ddLogLevelFromSDLogLevel:level]
               flag:[SDLoggerUtils ddLogFlagFromSDLogLevel:level]
@@ -363,7 +311,18 @@
                tag:nil
             format:format
               args:arguments];
+#else
+        if([self.delegate respondsToSelector:@selector(logger:didReceiveLogWithLevel:syncMode:module:file:function:line:format:arguments:)])
+        {
+            [self.delegate logger:self didReceiveLogWithLevel:level syncMode:syncLog module:module file:file function:function line:line format:format arguments:arguments];
+        }
+        else
+        {
+            NSString *message = [[NSString alloc] initWithFormat:format arguments:arguments];
+            NSLog(@"%@",message);
+        }
         
+#endif
     }
 }
 
@@ -371,4 +330,6 @@
 {
     [self logWithLevel:level module:module file:file function:function line:line format:message, nil];
 }
+
+
 @end
