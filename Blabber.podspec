@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "Blabber"
-  s.version          = "1.1.1"
+  s.version          = "1.1.2"
   s.summary          = "iOS modular logger based on CocoaLumberjack."
   s.homepage         = "https://github.com/SysdataSpA/Blabber"
   s.license          = 'Apache 2.0'
@@ -27,8 +27,6 @@ Pod::Spec.new do |s|
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
 
-  # s.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'SD_LOGGER_AVAILABLE=1' }
-
 
   s.subspec 'Core' do |co|
     co.source_files = 'Blabber/Classes/Base/**/*'
@@ -38,6 +36,8 @@ Pod::Spec.new do |s|
      cl.source_files = 'Blabber/Classes/CocoaLumberjack/*'
      cl.dependency 'Blabber/Core'
      cl.dependency 'CocoaLumberjack', '~> 2.0'
+
+     cl.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOALUMBERJACK_AVAILABLE=1' }
   end
 
   s.default_subspec = 'Core'
