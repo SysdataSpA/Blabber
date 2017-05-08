@@ -20,8 +20,6 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'Blabber/Classes/Base/**/*'
-  
   # s.resource_bundles = {
   #   'Blabber' => ['Blabber/Assets/*.png']
   # }
@@ -32,8 +30,13 @@ Pod::Spec.new do |s|
   # s.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'SD_LOGGER_AVAILABLE=1' }
 
 
+  s.subspec 'Core' do |co|
+    co.source_files = 'Blabber/Classes/Base/**/*'
+  end
+
   s.subspec 'CocoaLumberjack' do |cl|
      cl.source_files = 'Blabber/Classes/CocoaLumberjack/*'
+     cl.dependency 'Blabber/Core'
      cl.dependency 'CocoaLumberjack', '~> 2.0'
   end
 

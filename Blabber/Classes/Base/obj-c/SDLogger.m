@@ -13,9 +13,8 @@
 // limitations under the License.
 
 #import "SDLogger.h"
-#import "DDLog.h"
-
 #ifdef COCOALUMBERJACK_AVAILABLE
+#import "DDLog.h"
 #import "SDDDFormatter.h"
 #endif
 
