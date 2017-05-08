@@ -1,6 +1,6 @@
 {
   "name": "Blabber",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "summary": "iOS modular logger based on CocoaLumberjack.",
   "homepage": "https://github.com/SysdataSpA/Blabber",
   "license": "Apache 2.0",
@@ -9,7 +9,7 @@
   },
   "source": {
     "git": "https://github.com/SysdataSpA/Blabber.git",
-    "tag": "1.1.1"
+    "tag": "1.1.2"
   },
   "platforms": {
     "ios": "8.0"
@@ -18,7 +18,10 @@
   "subspecs": [
     {
       "name": "Core",
-      "source_files": "Blabber/Classes/Base/**/*"
+      "source_files": "Blabber/Classes/Base/**/*",
+      "xcconfig": {
+        "GCC_PREPROCESSOR_DEFINITIONS": "BLABBER=1"
+      }
     },
     {
       "name": "CocoaLumberjack",
@@ -32,7 +35,7 @@
         ]
       },
       "xcconfig": {
-        "GCC_PREPROCESSOR_DEFINITIONS": "COCOALUMBERJACK_AVAILABLE=1"
+        "GCC_PREPROCESSOR_DEFINITIONS": "COCOALUMBERJACK=1"
       }
     }
   ]

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 #import <Foundation/Foundation.h>
-#ifdef COCOALUMBERJACK_AVAILABLE
+#ifdef COCOALUMBERJACK
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #endif
 
