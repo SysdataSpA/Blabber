@@ -15,13 +15,15 @@
 #import "SDLogger.h"
 #import "DDLog.h"
 
+#ifdef HAS_COCOALUMBERJACK
+#import "SDDDFormatter.h"
+#endif
+
 #define kGenericModuleName  @"SDLogger.Generic"
 
 @interface SDLoggerUtils : NSObject
 
 #ifdef HAS_COCOALUMBERJACK
-#import "SDDDFormatter.h"
-
 + (DDLogLevel)ddLogLevelFromSDLogLevel:(SDLogLevel)level;
 + (DDLogFlag)ddLogFlagFromSDLogLevel:(SDLogLevel)level;
 #endif
