@@ -49,7 +49,7 @@ typedef NS_ENUM (NSUInteger, SDLogLevel)
 @end
 
 /**
- *  Classe that hold all settings for an SDLogger module.
+ *  Class that holds all settings for an SDLogger module.
  */
 @interface SDLogModuleSetting : NSObject
 
@@ -93,7 +93,7 @@ typedef NS_ENUM (NSUInteger, SDLogLevel)
 @interface SDLogger : NSObject
 
 
-@property (nonatomic, weak) id <SDLoggerDelegate> delegate;
+@property (nonatomic, weak) id <SDLoggerDelegate> _Nullable delegate;
 
 /**
  *  log level for all logs that are not associated to a specific module.
