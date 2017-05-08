@@ -14,7 +14,7 @@
 
 #import <Foundation/Foundation.h>
 #if __has_include("CocoaLumberjack.h") || __has_include("CocoaLumberjack/CocoaLumberjack.h")
-#define HAS_COCOALUMBERJACK 1
+#define COCOALUMBERJACK_AVAILABLE 1
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #endif
 
