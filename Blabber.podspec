@@ -40,4 +40,6 @@ Pod::Spec.new do |s|
      cl.dependency 'CocoaLumberjack', '~> 2.0'
   end
 
+  s.default_subspec = 'Core'
+
 end
