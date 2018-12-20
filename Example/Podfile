@@ -1,7 +1,7 @@
 use_frameworks!
 
 target 'Blabber_Example' do
-  pod 'Blabber/CocoaLumberjack', :path => '../'
+  pod 'Blabber/CleanroomLogger', :path => '../'
 
   target 'Blabber_Tests' do
     inherit! :search_paths

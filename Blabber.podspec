@@ -41,6 +41,12 @@ Pod::Spec.new do |s|
      cl.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOALUMBERJACK=1' }
   end
 
+  s.subspec 'CleanroomLogger' do |cl|
+    cl.source_files = 'Blabber/Classes/CleanroomLogger/*'
+    cl.dependency 'Blabber/Core'
+    cl.dependency 'CleanroomLogger'
+  end
+
   s.default_subspec = 'Core'
 
 end

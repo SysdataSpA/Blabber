@@ -16,8 +16,10 @@ class SDSwiftViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        segmentControl.selectedSegmentIndex = UISegmentedControl.noSegment
 
         SDLogger.shared().setup()
+//        Log.setup()
     }
 
 
@@ -35,38 +37,42 @@ class SDSwiftViewController: UIViewController {
     @IBAction func segmentControlValueChanged(_ sender: UISegmentedControl) {
         switch (sender.selectedSegmentIndex) {
         case 0:
-            SDLogger.shared().genericLogLevel = SDLogLevel.verbose
+//            SDLogger.shared().genericLogLevel = SDLogLevel.verbose
+            Logger.setup(settings: LogSettings(.verbose))
             break;
         case 1:
-            SDLogger.shared().genericLogLevel = SDLogLevel.info
+//            SDLogger.shared().genericLogLevel = SDLogLevel.info
+            Logger.setup(settings: LogSettings(.info))
             break;
         case 2:
-            SDLogger.shared().genericLogLevel = SDLogLevel.warning
+//            SDLogger.shared().genericLogLevel = SDLogLevel.warning
+            Logger.setup(settings: LogSettings(.warning))
             break;
         case 3:
-            SDLogger.shared().genericLogLevel = SDLogLevel.error
+//            SDLogger.shared().genericLogLevel = SDLogLevel.error
+            Logger.setup(settings: LogSettings(.error))
             break;
-            
-            
         default:
             break;
         }
+        segmentControl.isUserInteractionEnabled = false
+        segmentControl.alpha = 0.3
     }
     
     @IBAction func logVerbose(_ sender: UIButton) {
-        Log.verbose.message("This is a verbose message")
+        Log.verbose?.message("This is a verbose message")
     }
     
     @IBAction func logInfo(_ sender: UIButton) {
-        Log.info.message("This is an info message")
+        Log.info?.message("This is an info message")
     }
     
     @IBAction func logWarning(_ sender: UIButton) {
-        Log.warning.message("This is a warning message")
+        Log.warning?.message("This is a warning message")
     }
     
     @IBAction func logError(_ sender: UIButton) {
-        Log.error.message("This is an error message")
+        Log.error?.message("This is an error message")
     }
     
 }
