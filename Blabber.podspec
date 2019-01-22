@@ -36,7 +36,7 @@ Pod::Spec.new do |s|
   s.subspec 'CocoaLumberjack' do |cl|
      cl.source_files = 'Blabber/Classes/CocoaLumberjack/*'
      cl.dependency 'Blabber/Core'
-     cl.dependency 'CocoaLumberjack', '~> 2.0'
+     cl.dependency 'CocoaLumberjack'
 
      cl.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOALUMBERJACK=1' }
   end
