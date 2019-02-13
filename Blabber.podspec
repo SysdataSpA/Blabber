@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "Blabber"
-  s.version          = "1.1.5"
+  s.version          = "1.1.6"
   s.summary          = "iOS modular logger based on CocoaLumberjack."
   s.homepage         = "https://github.com/SysdataSpA/Blabber"
   s.license          = 'Apache 2.0'
@@ -36,7 +36,7 @@ Pod::Spec.new do |s|
   s.subspec 'CocoaLumberjack' do |cl|
      cl.source_files = 'Blabber/Classes/CocoaLumberjack/*'
      cl.dependency 'Blabber/Core'
-     cl.dependency 'CocoaLumberjack', '~> 2.0'
+     cl.dependency 'CocoaLumberjack', '~> 3.4.2'
 
      cl.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOALUMBERJACK=1' }
   end

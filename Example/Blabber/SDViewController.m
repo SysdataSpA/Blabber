@@ -59,6 +59,7 @@
 
 - (IBAction)logWarning:(UIButton *)sender
 {
+    for (int i=0; i<10000; i++)
     SDLogWarning(@"This is a warning message");
 }
 
