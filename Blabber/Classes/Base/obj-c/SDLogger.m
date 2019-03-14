@@ -19,6 +19,7 @@
 #endif
 
 #define kGenericModuleName  @"SDLogger.Generic"
+#define IOS_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 
 @interface SDLoggerUtils : NSObject
 
@@ -185,7 +186,11 @@
         // Formatter
         SDDDFormatter *formatter = [[SDDDFormatter alloc] init];
         
-        [[DDTTYLogger sharedInstance] setLogFormatter:formatter];
+        if (IOS_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
+            [[DDOSLogger sharedInstance] setLogFormatter:formatter];
+        } else {
+            [[DDTTYLogger sharedInstance] setLogFormatter:formatter];
+        }
         
         // Logger to log into file
         NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -197,7 +202,11 @@
         fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
         [fileLogger setLogFormatter:formatter];
         
-        loggers = @[[DDASLLogger sharedInstance], [DDTTYLogger sharedInstance], fileLogger];
+        if (IOS_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
+            loggers = @[[DDOSLogger sharedInstance], fileLogger];
+        } else {
+            loggers = @[[DDASLLogger sharedInstance], [DDTTYLogger sharedInstance], fileLogger];
+        }
     }
     
     for (id<DDLogger> logger in loggers)

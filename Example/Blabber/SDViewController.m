@@ -7,7 +7,7 @@
 //
 
 #import "SDViewController.h"
-#import <Blabber/SDLogger.h>
+@import Blabber;
 
 @interface SDViewController ()
 
@@ -20,7 +20,7 @@
 {
     [super viewDidLoad];
 	
-    [[SDLogger sharedLogger] setup];
+    [SDLogger.sharedLogger setup];
     
 }
 

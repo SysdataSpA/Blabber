@@ -322,7 +322,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Blabber_Example/Pods-Blabber_Example-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Blabber_Example/Pods-Blabber_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Blabber/Blabber.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 			);
@@ -333,7 +333,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Blabber_Example/Pods-Blabber_Example-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Blabber_Example/Pods-Blabber_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		84F426DE509127D77E8C7931 /* [CP] Check Pods Manifest.lock */ = {
