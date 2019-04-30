@@ -168,6 +168,11 @@
     if (self)
     {
         settingsByModule = [[NSMutableDictionary alloc] init];
+#if DEBUG
+        self.genericLogLevel = SDLogLevelVerbose;
+#else
+        self.genericLogLevel = SDLogLevelError;
+#endif
     }
     return self;
 }
@@ -177,14 +182,31 @@
     [self setupWithLoggers:nil];
 }
 
-- (void) setupWithLoggers:(NSArray*)loggers
+#if COCOALUMBERJACK
+- (void)setupWithFormatter:(id<DDLogFormatter> _Nullable)formatter
+{
+    [self setupWithLoggers:nil formatter:formatter];
+}
+#endif
+
+- (void) setupWithLoggers:(NSArray* _Nullable)loggers
 {
 #if COCOALUMBERJACK
+    [self setupWithLoggers:loggers formatter:nil];
+#endif
+}
+
+#if COCOALUMBERJACK
+- (void) setupWithLoggers:(NSArray* _Nullable)loggers formatter:(id<DDLogFormatter> _Nullable)formatter
+{
     // default setup
     if (loggers.count == 0)
     {
         // Formatter
-        SDDDFormatter *formatter = [[SDDDFormatter alloc] init];
+        if(!formatter)
+        {
+            formatter = [SDDDFormatter new];
+        }
         
         if (IOS_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
             [[DDOSLogger sharedInstance] setLogFormatter:formatter];
@@ -213,16 +235,8 @@
     {
         [DDLog addLogger:logger];
     }
-#endif
-    
-    // default levels for generic logger.
-    // levels should be set after DDTTYLogger creation to use XcodeColors.
-#if DEBUG
-    self.genericLogLevel = SDLogLevelVerbose;
-#else
-    self.genericLogLevel = SDLogLevelError;
-#endif
 }
+#endif
 
 - (void)setGenericLogLevel:(SDLogLevel)genericLogLevel
 {
@@ -279,33 +293,18 @@
         va_end(args);
     }
 }
-- (void) logWithLevel:(SDLogLevel)level module:(NSString *)module file:(NSString *)file function:(NSString*)function line:(NSUInteger)line format:(NSString *)format arguments:(va_list)arguments;
+- (void) logWithLevel:(SDLogLevel)level module:(NSString *)module file:(NSString *)file function:(NSString*)function line:(NSUInteger)line format:(NSString *)format arguments:(va_list)arguments
 {
-    SDLogModuleSetting *setting = nil;
-    SDLogLevel filterLevel = self.genericLogLevel;
-    
-    // In absence of module, fallback on generic module
-    if (module.length == 0)
-    {
-        module = kGenericModuleName;
-    }
-    
-    setting = settingsByModule[module];
-    if (!setting)
-    {
-        setting = settingsByModule[kGenericModuleName];
-    }
-    
-    filterLevel = setting.logLevel;
-    
-    // log is synchronous if corresponding settings enable it or if is anble the global flag.
-    BOOL syncLog = (![setting useAsyncLogForLogLevel:level] || self.forceSyncLogs);
+    SDLogModuleSetting *setting = [self settingsForModule:module];
+    SDLogLevel filterLevel = setting.logLevel;
     
     // log levels more verbose have lower values, so if log level of module is grater than log level of message this be missed.
     if (level < filterLevel)
     {
         return;
     }
+    // log is synchronous if corresponding settings enable it or if is anble the global flag.
+    BOOL syncLog = (![setting useAsyncLogForLogLevel:level] || self.forceSyncLogs);
     
     // Log with CocoaLumberjack
     if (format)
@@ -331,14 +330,57 @@
             NSString *message = [[NSString alloc] initWithFormat:format arguments:arguments];
             NSLog(@"%@",message);
         }
-        
 #endif
     }
 }
 
 - (void)logWithLevel:(SDLogLevel)level module:(NSString *)module file:(NSString *)file function:(NSString *)function line:(NSUInteger)line message:(NSString *)message
 {
-    [self logWithLevel:level module:module file:file function:function line:line format:message, nil];
+    SDLogModuleSetting *setting = [self settingsForModule:module];
+    SDLogLevel filterLevel = setting.logLevel;
+    
+    // log levels more verbose have lower values, so if log level of module is grater than log level of message this be missed.
+    if (level < filterLevel)
+    {
+        return;
+    }
+    
+    // log is synchronous if corresponding settings enable it or if is anble the global flag.
+    BOOL syncLog = (![setting useAsyncLogForLogLevel:level] || self.forceSyncLogs);
+    
+#if COCOALUMBERJACK
+    DDLogMessage* logMessage = [[DDLogMessage alloc] initWithMessage:message level:[SDLoggerUtils ddLogLevelFromSDLogLevel:level] flag:[SDLoggerUtils ddLogFlagFromSDLogLevel:level] context:setting.context file:file function:function line:line tag:nil options:nil timestamp:[NSDate date]];
+    [DDLog log:syncLog message:logMessage];
+#else
+    if([self.delegate respondsToSelector:@selector(logger:didReceiveLogWithLevel:syncMode:module:file:function:line:format:arguments:)])
+    {
+        [self.delegate logger:self didReceiveLogWithLevel:level syncMode:syncLog module:module file:file function:function line:line format:format arguments:arguments];
+    }
+    else
+    {
+        NSString *message = [[NSString alloc] initWithFormat:format arguments:arguments];
+        NSLog(@"%@",message);
+    }
+#endif
+}
+
+#pragma mark Utils
+
+- (SDLogModuleSetting*) settingsForModule:(NSString*)module
+{
+    SDLogModuleSetting *setting = nil;
+    // In absence of module, fallback on generic module
+    if (module.length == 0)
+    {
+        module = kGenericModuleName;
+    }
+    
+    setting = settingsByModule[module];
+    if (!setting)
+    {
+        setting = settingsByModule[kGenericModuleName];
+    }
+    return setting;
 }
 
 

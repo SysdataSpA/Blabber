@@ -132,6 +132,10 @@ typedef NS_ENUM (NSUInteger, SDLogLevel)
  */
 - (void) setupWithLoggers:(NSArray* _Nullable)loggers;
 
+#if COCOALUMBERJACK
+- (void) setupWithFormatter:(id<DDLogFormatter> _Nullable)formatter;
+#endif
+
 /**
  * set log level for a specific module.
  *
