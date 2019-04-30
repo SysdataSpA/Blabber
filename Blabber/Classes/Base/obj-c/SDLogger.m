@@ -321,13 +321,13 @@
             format:format
               args:arguments];
 #else
-        if([self.delegate respondsToSelector:@selector(logger:didReceiveLogWithLevel:syncMode:module:file:function:line:format:arguments:)])
+        NSString *message = [[NSString alloc] initWithFormat:format arguments:arguments];
+        if([self.delegate respondsToSelector:@selector(logger:didReceiveLogWithLevel:syncMode:module:file:function:line:message:)])
         {
-            [self.delegate logger:self didReceiveLogWithLevel:level syncMode:syncLog module:module file:file function:function line:line format:format arguments:arguments];
+            [self.delegate logger:self didReceiveLogWithLevel:level syncMode:syncLog module:module file:file function:function line:line message:message];
         }
         else
         {
-            NSString *message = [[NSString alloc] initWithFormat:format arguments:arguments];
             NSLog(@"%@",message);
         }
 #endif
@@ -349,16 +349,15 @@
     BOOL syncLog = (![setting useAsyncLogForLogLevel:level] || self.forceSyncLogs);
     
 #if COCOALUMBERJACK
-    DDLogMessage* logMessage = [[DDLogMessage alloc] initWithMessage:message level:[SDLoggerUtils ddLogLevelFromSDLogLevel:level] flag:[SDLoggerUtils ddLogFlagFromSDLogLevel:level] context:setting.context file:file function:function line:line tag:nil options:nil timestamp:[NSDate date]];
+    DDLogMessage* logMessage = [[DDLogMessage alloc] initWithMessage:message level:[SDLoggerUtils ddLogLevelFromSDLogLevel:level] flag:[SDLoggerUtils ddLogFlagFromSDLogLevel:level] context:setting.context file:file function:function line:line tag:nil options:0 timestamp:[NSDate date]];
     [DDLog log:syncLog message:logMessage];
 #else
-    if([self.delegate respondsToSelector:@selector(logger:didReceiveLogWithLevel:syncMode:module:file:function:line:format:arguments:)])
+    if([self.delegate respondsToSelector:@selector(logger:didReceiveLogWithLevel:syncMode:module:file:function:line:message:)])
     {
-        [self.delegate logger:self didReceiveLogWithLevel:level syncMode:syncLog module:module file:file function:function line:line format:format arguments:arguments];
+        [self.delegate logger:self didReceiveLogWithLevel:level syncMode:syncLog module:module file:file function:function line:line message:message];
     }
     else
     {
-        NSString *message = [[NSString alloc] initWithFormat:format arguments:arguments];
         NSLog(@"%@",message);
     }
 #endif
