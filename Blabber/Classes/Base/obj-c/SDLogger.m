@@ -41,6 +41,10 @@
 {
     switch (level)
     {
+        case SDLogLevelDebug:
+        {
+            return DDLogLevelDebug;
+        }
         case SDLogLevelVerbose:
         {
             return DDLogLevelVerbose;
@@ -67,6 +71,10 @@
 {
     switch (level)
     {
+        case SDLogLevelDebug:
+        {
+            return DDLogFlagDebug;
+        }
         case SDLogLevelVerbose:
         {
             return DDLogFlagVerbose;

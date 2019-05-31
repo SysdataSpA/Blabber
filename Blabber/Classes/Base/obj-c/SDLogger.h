@@ -22,7 +22,8 @@
  */
 typedef NS_ENUM (NSUInteger, SDLogLevel)
 {
-    SDLogLevelVerbose = 1,
+    SDLogLevelDebug = 1,
+    SDLogLevelVerbose,
     SDLogLevelInfo,
     SDLogLevelWarning,
     SDLogLevelError
@@ -225,6 +226,7 @@ typedef NS_ENUM (NSUInteger, SDLogLevel)
 #define SDLogModuleWarning(mdl, frmt, ...)   SD_LOG_MACRO(SDLogLevelWarning, mdl, __PRETTY_FUNCTION__, frmt, ## __VA_ARGS__)
 #define SDLogModuleInfo(mdl, frmt, ...)   SD_LOG_MACRO(SDLogLevelInfo, mdl, __PRETTY_FUNCTION__, frmt, ## __VA_ARGS__)
 #define SDLogModuleVerbose(mdl, frmt, ...)   SD_LOG_MACRO(SDLogLevelVerbose, mdl, __PRETTY_FUNCTION__, frmt, ## __VA_ARGS__)
+#define SDLogModuleDebug(mdl, frmt, ...)   SD_LOG_MACRO(SDLogLevelDebug, mdl, __PRETTY_FUNCTION__, frmt, ## __VA_ARGS__)
 
 /**
  *  function to log a generic message (not associated to specific module).
@@ -237,5 +239,6 @@ typedef NS_ENUM (NSUInteger, SDLogLevel)
 #define SDLogWarning(frmt, ...)   SD_LOG_MACRO(SDLogLevelWarning, nil, __PRETTY_FUNCTION__, frmt, ## __VA_ARGS__)
 #define SDLogInfo(frmt, ...)   SD_LOG_MACRO(SDLogLevelInfo, nil, __PRETTY_FUNCTION__, frmt, ## __VA_ARGS__)
 #define SDLogVerbose(frmt, ...)   SD_LOG_MACRO(SDLogLevelVerbose, nil, __PRETTY_FUNCTION__, frmt, ## __VA_ARGS__)
+#define SDLogDebug(frmt, ...)   SD_LOG_MACRO(SDLogLevelDebug, nil, __PRETTY_FUNCTION__, frmt, ## __VA_ARGS__)
 
 
