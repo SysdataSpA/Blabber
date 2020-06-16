@@ -7,7 +7,7 @@
 //
 
 #import "SDViewController.h"
-#import <Blabber/SDLogger.h>
+@import Blabber;
 
 @interface SDViewController ()
 
@@ -20,7 +20,7 @@
 {
     [super viewDidLoad];
 	
-    [[SDLogger sharedLogger] setup];
+    [SDLogger.sharedLogger setup];
     
 }
 
@@ -59,6 +59,7 @@
 
 - (IBAction)logWarning:(UIButton *)sender
 {
+    for (int i=0; i<10000; i++)
     SDLogWarning(@"This is a warning message");
 }
 
