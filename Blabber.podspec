@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = "Blabber"
-  s.version          = "1.1.10"
-  s.swift_version    = '4.2'
+  s.version          = "1.1.11"
+  s.swift_version    = '5.0'
   s.summary          = "iOS modular logger based on CocoaLumberjack."
   s.homepage         = "https://github.com/SysdataSpA/Blabber"
   s.license          = 'Apache 2.0'

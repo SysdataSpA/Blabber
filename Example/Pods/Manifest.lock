@@ -1,17 +1,17 @@
 PODS:
-  - Blabber/CocoaLumberjack (1.1.6):
+  - Blabber/CocoaLumberjack (1.1.10):
     - Blabber/Core
     - CocoaLumberjack (~> 3.5.1)
-  - Blabber/Core (1.1.6)
-  - CocoaLumberjack (3.5.1):
-    - CocoaLumberjack/Core (= 3.5.1)
-  - CocoaLumberjack/Core (3.5.1)
+  - Blabber/Core (1.1.10)
+  - CocoaLumberjack (3.5.3):
+    - CocoaLumberjack/Core (= 3.5.3)
+  - CocoaLumberjack/Core (3.5.3)
 
 DEPENDENCIES:
   - Blabber/CocoaLumberjack (from `../`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - CocoaLumberjack
 
 EXTERNAL SOURCES:
@@ -19,9 +19,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Blabber: 776cbaafad2a6a0bf95083217980d0d0ac687aa8
-  CocoaLumberjack: 2101f8a5508197a305e737d16c5c2e9e2157628c
+  Blabber: 9f6635fe91bba53130875975b1ea85691ffcd05d
+  CocoaLumberjack: 2f44e60eb91c176d471fdba43b9e3eae6a721947
 
 PODFILE CHECKSUM: 1c7eb40f7873689a7422d4dc9328a751c88beb22
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.9.1
