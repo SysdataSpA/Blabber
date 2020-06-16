@@ -531,7 +531,7 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Sviluppo Sysdata Italia";
+				PROVISIONING_PROFILE_SPECIFIER = "Sviluppo Sysdata wildcard";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
